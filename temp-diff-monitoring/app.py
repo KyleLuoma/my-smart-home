@@ -44,4 +44,19 @@ def update_temp():
 
 @app.route("/gettemp")
 def get_temp():
-    return("<p>Temperature: {}</p><p>Humidity: {}</p>".format("hello", "world"))
+    output = "<h1>Temp and Humidity</h1>"
+    f = open("./sql/get-latest-observations.sql")
+    db_cur.execute(f.read())
+    hotter_location = "back yard"
+    hottest_temp = 0
+    for row in db_cur:
+        if row[3] > hottest_temp:
+            hottest_temp = row[3]
+            hottest_location = row[1]        
+        print(row)
+        output += ("<h2>"+row[1]+"</h2>\n") # Location
+        output += ("<p>Temperature: {} </p>\n".format(str(row[3])))
+        output += ("<p>Humidity: {} </p>\n".format(str(row[4])))
+    f.close()
+    output += "<h3>It is hotter in the {} right now. </h3>\n".format(hotter_location)
+    return(output)

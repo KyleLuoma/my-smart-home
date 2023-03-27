@@ -1,0 +1,1 @@
+ nohup flask run --host 0.0.0.0 > l.txt 2>&1 &

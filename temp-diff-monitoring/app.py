@@ -1,16 +1,15 @@
 from flask import Flask
-from flask import request, session
-from flask_session import Session
+from flask import request
 import mariadb
 import json
+import time
 
 app = Flask(__name__)
-
-SESSION_TYPE = 'filesystem'
 app.config.from_object(__name__)
-Session(app)
 
 db_info = json.load(open("./dbinfo.json"))
+
+add_observation_sql = """INSERT INTO observations(timestamp, station_ip, temp_f, humidity) VALUES (?, ?, ?, ?)"""
 
 try:
     db_conn = mariadb.connect(
@@ -25,17 +24,24 @@ except mariadb.Error as e:
 
 db_cur = db_conn.cursor()
 
+f = open("./sql/create-observations-table.sql")
+db_cur.execute(f.read())
+f.close()
+f = open("./sql/create-stations-table.sql")
+db_cur.execute(f.read())
+f.close()
 
 @app.route("/updatetemp/", methods = ["GET", "POST"])
 def update_temp():
     if request.method == "POST":
         print("From client", request.remote_addr)
         print(request.json['temperature'], ", ", request.json['humidity'])
-        session['current_temp'] = request.json['temperature']
-        session['current_humidity'] = request.json['humidity']
+        date_time = time.strftime('%Y-%m-%d %H:%M:%S')
+        db_cur.execute(add_observation_sql, (date_time, str(request.remove_addr), request.json['temperature'], request.json['humidity']))
+        
     return "received"
 
 
 @app.route("/gettemp")
 def get_temp():
-    return("<p>Temperature: {}</p><p>Humidity: {}</p>".format(session['current_temp'], session['current_humidity']))
+    return("<p>Temperature: {}</p><p>Humidity: {}</p>".format("hello", "world"))

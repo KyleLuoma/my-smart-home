@@ -37,7 +37,7 @@ def update_temp():
         print("From client", request.remote_addr)
         print(request.json['temperature'], ", ", request.json['humidity'])
         date_time = time.strftime('%Y-%m-%d %H:%M:%S')
-        db_cur.execute(add_observation_sql, (date_time, str(request.remove_addr), request.json['temperature'], request.json['humidity']))
+        db_cur.execute(add_observation_sql, (date_time, str(request.remote_addr), request.json['temperature'], request.json['humidity']))
         
     return "received"
 

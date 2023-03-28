@@ -3,6 +3,7 @@ from flask import request
 import mariadb
 import json
 import time
+from datetime import datetime
 
 SMS_BLACKOUT_INTERVAL = 4 #hours minimum interval between messages
 
@@ -55,7 +56,7 @@ def update_temp():
 
     print(type(time.localtime()), type(latest_observation[0]))
 
-    time_delta = time.localtime() - latest_observation[0]
+    time_delta = time.datetime.datetime(*time.localtime()) - latest_observation[0]
 
     if request.method == "POST":
         print("From client", request.remote_addr)

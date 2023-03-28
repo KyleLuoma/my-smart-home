@@ -60,10 +60,11 @@ def update_temp():
 def get_temp():
     output = "<h1>Temp and Humidity</h1>"
     f = open("./sql/get-latest-observations.sql")
-    db_cur.execute(f.read())
+    temp_cur = db_conn.cursor()
+    temp_cur.execute(f.read())
     hottest_location = ""
     hottest_temp = 0
-    for row in db_cur:
+    for row in temp_cur:
         if row[3] > hottest_temp:
             hottest_temp = row[3]
             hottest_location = row[1]        

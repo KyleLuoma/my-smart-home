@@ -52,16 +52,14 @@ def update_temp():
     update_temp_db_cur.execute(latest_observation_sql.format(request.remote_addr))
 
     latest_observation = update_temp_db_cur.fetchone()
-    latest_hour = latest_observation[0].hour
-    latest_minute = latest_observation[0].minute
-    current_hour = time.localtime().tm_hour
-    current_minute = time.localtime().tm_min
+
+    time_delta = time.localtime() - latest_observation[0]
 
     if request.method == "POST":
         print("From client", request.remote_addr)
         print(request.json['temperature'], ", ", request.json['humidity'])
         date_time = time.strftime('%Y-%m-%d %H:%M:%S')
-        if current_minute - latest_minute > 5 or current_hour > latest_hour:
+        if time_delta.minutes > 5:
             update_temp_db_cur.execute(add_observation_sql, (date_time, str(request.remote_addr), request.json['temperature'], request.json['humidity']))
             update_temp_db_conn.commit()
     return "received"

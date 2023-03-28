@@ -50,8 +50,8 @@ def update_temp():
     latest_observation_sql = """SELECT timestamp FROM observations ORDER BY timestamp DESC LIMIT 1"""
     update_temp_db_cur.execute(latest_observation_sql)
     latest_observation = update_temp_db_cur.fetchone()
-    latest_hour = latest_observation[0][3]
-    latest_minute = latest_observation[0][4]
+    latest_hour = latest_observation[0].hour
+    latest_minute = latest_observation[0].minute
     current_hour = time.localtime().tm_hour
     current_minute = time.localtime().tm_min
     if request.method == "POST":

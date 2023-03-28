@@ -73,4 +73,5 @@ def get_temp():
         output += ("<p>Humidity: {} </p>\n".format(str(row[4])))
     f.close()
     output += "<h3>It is hotter in the {} right now. </h3>\n".format(hottest_location)
+    db_conn.commit()
     return(output)

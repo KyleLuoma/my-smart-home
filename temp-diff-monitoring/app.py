@@ -47,13 +47,16 @@ except mariadb.Error as e:
 update_temp_db_cur = update_temp_db_conn.cursor()
 @app.route("/updatetemp/", methods = ["GET", "POST"])
 def update_temp():
-    latest_observation_sql = """SELECT timestamp FROM observations ORDER BY timestamp DESC LIMIT 1"""
-    update_temp_db_cur.execute(latest_observation_sql)
+    
+    latest_observation_sql = """SELECT timestamp FROM observations where station_ip = '{}' ORDER BY timestamp DESC LIMIT 1"""
+    update_temp_db_cur.execute(latest_observation_sql.format(request.remote_addr))
+
     latest_observation = update_temp_db_cur.fetchone()
     latest_hour = latest_observation[0].hour
     latest_minute = latest_observation[0].minute
     current_hour = time.localtime().tm_hour
     current_minute = time.localtime().tm_min
+
     if request.method == "POST":
         print("From client", request.remote_addr)
         print(request.json['temperature'], ", ", request.json['humidity'])

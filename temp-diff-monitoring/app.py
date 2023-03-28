@@ -53,6 +53,8 @@ def update_temp():
 
     latest_observation = update_temp_db_cur.fetchone()
 
+    print(type(time.localtime()), type(latest_observation[0]))
+
     time_delta = time.localtime() - latest_observation[0]
 
     if request.method == "POST":

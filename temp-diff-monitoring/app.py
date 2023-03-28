@@ -8,6 +8,7 @@ SMS_BLACKOUT_INTERVAL = 4 #hours minimum interval between messages
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 db_info = json.load(open("./dbinfo.json"))
 

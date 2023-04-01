@@ -104,6 +104,7 @@ def get_temp():
         output += ("<h2>"+row[1]+"</h2>\n") # Location
         output += ("<p>Temperature: {} </p>\n".format(str(row[3])))
         output += ("<p>Humidity: {} </p>\n".format(str(row[4])))
+        output += ("<p>Last Update: {} </p>\n".format(str(row[2])))
     f.close()
     output += "<h3>It is hotter in the {} right now. </h3>\n".format(hottest_location)
     get_temp_db_conn.commit()
